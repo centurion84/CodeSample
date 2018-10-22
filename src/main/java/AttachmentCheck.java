@@ -59,7 +59,6 @@ public class AttachmentCheck {
         return Arrays.toString(digest);
     }
     @BeforeTest
-
     public static void openBrowser() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         browser = new ChromeDriver();
@@ -68,7 +67,6 @@ public class AttachmentCheck {
         browser.get("http://jira.hillel.it:8080/secure/Dashboard.jspa");
     }
     @AfterTest
-
     public static void closeBrowser() {
         browser.quit();
     }
