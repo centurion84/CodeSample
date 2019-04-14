@@ -1,10 +1,8 @@
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -40,6 +38,21 @@ public class Andrey_Prilepskiy_TestTask {
         clicker.moveToElement(browser.findElement(By.cssSelector(cssSelector)), 0, 50).click().build().perform();
     }
 
+
+    // Test Data
+    static String TestName="TestName";
+    static String TestSurname = "TestSurname";
+    static String NickRus = "Логин";
+    static String DuplNick = "Test";
+    static String UnduplNick = "TestNick";
+    static String InvFormatEmail = "test.test.ua";
+    static String DuplEmail = "testmail@test.ua";
+    static String UnduplEmail = "testemail@test.ua";
+    static String Less6CharsPassword = "12345";
+    static String Chars6Password = "123456";
+    static String UnequalPasswordConfirm = "111111";
+
+
     // Open Reg form on web site
     @BeforeTest
     public static void openRegForm() {
@@ -49,214 +62,313 @@ public class Andrey_Prilepskiy_TestTask {
         browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         browser.get("http://odpublic.net");
         findAndClick("a[id='btnRegOpen']");
+
     }
     // Tests for Name
     @Test()
     public static void NameFieldClick() {
         findAndClick("input[id='users_models_RegisterForm_name']");
-        Assert.assertTrue(findElement("label[for='field_ur_name']").isDisplayed());
+        Assert.assertEquals("имя *" , findElement("label[for='field_ur_name']").getText());
     }
     @Test (dependsOnMethods = {"NameFieldClick"})
     public void NameFieldEmpty() {
         EmptyClick("input[id='users_models_RegisterForm_name']");
         WebDriverWait wait=new WebDriverWait(browser, 10);
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("div[id='users_models_RegisterForm_name_em_']"))).isDisplayed());
-        //Assert.assertTrue(findElement("div[id='users_models_RegisterForm_name_em_']").isDisplayed());
+        Assert.assertEquals("Необходимо заполнить поле «Имя»." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_name_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"NameFieldEmpty"})
     public static void NameFieldValue () {
-        findAndWrite("input[id='users_models_RegisterForm_name']", "TestName");
+        findAndWrite("input[id='users_models_RegisterForm_name']", TestName);
         EmptyClick("input[id='users_models_RegisterForm_name']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_name_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementWithText(
+                By.cssSelector("div[id='users_models_RegisterForm_name_em_']"),"Необходимо заполнить поле «Имя».")));
     }
     // Tests for Surname
     @Test(dependsOnMethods = {"NameFieldValue"})
     public static void SurnameFieldClick() {
         findAndClick("input[id='users_models_RegisterForm_family']");
-        Assert.assertTrue(findElement("label[for='field_ur_surname']").isDisplayed());
+        Assert.assertEquals("фамилия *" , findElement("label[for='field_ur_surname']").getText());
     }
     @Test (dependsOnMethods = {"SurnameFieldClick"})
     public void SurnameFieldEmpty() {
         EmptyClick("input[id='users_models_RegisterForm_family']");
-        WebDriverWait wait=new WebDriverWait(browser, 5);
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("div[id='users_models_RegisterForm_family_em_']"))).isDisplayed());
-        //Assert.assertTrue(findElement("div[id='users_models_RegisterForm_family_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals("Необходимо заполнить поле «Фамилия»." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_family_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"SurnameFieldEmpty"})
     public static void SurnameFieldValue () {
-        findAndWrite("input[id='users_models_RegisterForm_family']", "TestSurname");
+        findAndWrite("input[id='users_models_RegisterForm_family']", TestSurname);
         EmptyClick("input[id='users_models_RegisterForm_family']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_family_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementWithText(
+                By.cssSelector("div[id='users_models_RegisterForm_family_em_']"),"Необходимо заполнить поле «Фамилия».")));
     }
     // Tests for Nick (login)
     @Test (dependsOnMethods = {"SurnameFieldValue"})
     public static void NickFieldClick() {
         findAndClick("input[id='users_models_RegisterForm_login']");
-        Assert.assertTrue(findElement("label[for='field_ur_login']").isDisplayed());
+        Assert.assertEquals("ник *" , findElement("label[for='field_ur_login']").getText());
     }
     @Test (dependsOnMethods = {"NickFieldClick"})
     public void NickFieldEmpty() {
         EmptyClick("input[id='users_models_RegisterForm_login']");
         WebDriverWait wait=new WebDriverWait(browser, 10);
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("div[id='users_models_RegisterForm_login_em_']"))).isDisplayed());
-        //Assert.assertTrue(findElement("div[id='users_models_RegisterForm_login_em_']").isDisplayed());
+        Assert.assertEquals("Необходимо заполнить поле «Логин»." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_login_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"NickFieldEmpty"})
-    public static void NickFieldRusValue () {
-        findAndWrite("input[id='users_models_RegisterForm_login']", "Логин");
+    public static void NickFieldRusValue () throws InterruptedException {
+        findAndWrite("input[id='users_models_RegisterForm_login']", NickRus);
         EmptyClick("input[id='users_models_RegisterForm_login']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_login_em_']").isDisplayed());
+        Thread.sleep(2000);
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals("НЕ используйте русские буквы" , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_login_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"NickFieldRusValue"})
-    public static void NickFieldDuplicatedValue () {
-        findAndWrite("input[id='users_models_RegisterForm_login']", "Testlogin");
+    public static void NickFieldDuplicatedValue () throws InterruptedException {
+        findAndWrite("input[id='users_models_RegisterForm_login']", DuplNick);
         EmptyClick("input[id='users_models_RegisterForm_login']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_login_em_']").isDisplayed());
+        Thread.sleep(2000);
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals("Логин " +"\""+ DuplNick + "\""+" уже занят." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_login_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"NickFieldDuplicatedValue"})
     public static void NickFieldUnduplicatedValue () {
-        findAndWrite("input[id='users_models_RegisterForm_login']", "TestNick7");
+        findAndWrite("input[id='users_models_RegisterForm_login']", UnduplNick);
         EmptyClick("input[id='users_models_RegisterForm_login']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_login_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementWithText(
+                By.cssSelector("div[id='users_models_RegisterForm_login_em_']"),"Необходимо заполнить поле «Логин».")));
     }
     // Tests for E-mail
     @Test (dependsOnMethods = {"NickFieldUnduplicatedValue"})
     public static void EmailFieldClick() {
         findAndClick("input[id='users_models_RegisterForm_email']");
-        Assert.assertTrue(findElement("label[for='field_ur_email']").isDisplayed());
+        Assert.assertEquals("e-mail *" , findElement("label[for='field_ur_email']").getText());
     }
     @Test (dependsOnMethods = {"EmailFieldClick"})
     public void EmailFieldEmpty() {
         EmptyClick("input[id='users_models_RegisterForm_email']");
         WebDriverWait wait=new WebDriverWait(browser, 10);
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("div[id='users_models_RegisterForm_email_em_']"))).isDisplayed());
-       // Assert.assertTrue(findElement("div[id='users_models_RegisterForm_email_em_']").isDisplayed());
+        Assert.assertEquals("Необходимо заполнить поле «E-mail»." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_email_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"EmailFieldEmpty"})
-    public static void EmailFieldInvalidFormat () {
-        findAndWrite("input[id='users_models_RegisterForm_email']", "test.test.ua");
+    public static void EmailFieldInvalidFormat () throws InterruptedException {
+        findAndWrite("input[id='users_models_RegisterForm_email']", InvFormatEmail);
         EmptyClick("input[id='users_models_RegisterForm_email']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_email_em_']").isDisplayed());
+        Thread.sleep(2000);
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals("E-mail не является правильным E-Mail адресом." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_email_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"EmailFieldInvalidFormat"})
-    public static void EmailFieldDuplicatedValue () {
-        findAndWrite("input[id='users_models_RegisterForm_email']", "testmail@test.ua");
+    public static void EmailFieldDuplicatedValue () throws InterruptedException {
+        findAndWrite("input[id='users_models_RegisterForm_email']", DuplEmail);
         EmptyClick("input[id='users_models_RegisterForm_email']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_email_em_']").isDisplayed());
+        Thread.sleep(2000);
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals(("E-mail " +"\""+ DuplEmail + "\""+" уже занят.") , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_email_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"EmailFieldDuplicatedValue"})
     public static void EmailFieldUnduplicatedValue () {
-        findAndWrite("input[id='users_models_RegisterForm_email']", "testemail8@test.ua");
+        findAndWrite("input[id='users_models_RegisterForm_email']", UnduplEmail);
         EmptyClick("input[id='users_models_RegisterForm_email']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_email_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementWithText(
+                By.cssSelector("div[id='users_models_RegisterForm_email_em_']"),"Необходимо заполнить поле «E-mail».")));
     }
     // Tests for Password
     @Test (dependsOnMethods = {"EmailFieldUnduplicatedValue"})
     public static void PasswordFieldClick() {
         findAndClick("input[id='users_models_RegisterForm_password']");
-        Assert.assertTrue(findElement("label[for='field_ur_password']").isDisplayed());
+        Assert.assertEquals("пароль *" , findElement("label[for='field_ur_password']").getText());
     }
     @Test (dependsOnMethods = {"PasswordFieldClick"})
     public void PasswordFieldEmpty() {
         EmptyClick("input[id='users_models_RegisterForm_password']");
         WebDriverWait wait=new WebDriverWait(browser, 10);
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("div[id='users_models_RegisterForm_password_em_']"))).isDisplayed());
-        //Assert.assertTrue(findElement("div[id='users_models_RegisterForm_password_em_']").isDisplayed());
+        Assert.assertEquals("Необходимо заполнить поле «Пароль»." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_password_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"PasswordFieldEmpty"})
-    public static void PasswordFieldLess6CharsValue () {
-        findAndWrite("input[id='users_models_RegisterForm_password']", "12345");
+    public static void PasswordFieldLess6CharsValue () throws InterruptedException {
+        findAndWrite("input[id='users_models_RegisterForm_password']", Less6CharsPassword);
         EmptyClick("input[id='users_models_RegisterForm_password']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_password_em_']").isDisplayed());
+        Thread.sleep(2000);
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals("Пароль слишком короткий (Минимум: 6 симв.)." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_password_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"PasswordFieldLess6CharsValue"})
     public static void PasswordField6CharsValue () {
-        findAndWrite("input[id='users_models_RegisterForm_password']", "123456");
+        findAndWrite("input[id='users_models_RegisterForm_password']", Chars6Password);
         EmptyClick("input[id='users_models_RegisterForm_password']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_password_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementWithText(
+                By.cssSelector("div[id='users_models_RegisterForm_password_em_']"),"Необходимо заполнить поле «Пароль».")));
     }
     // Tests for Password Confirmation
     @Test (dependsOnMethods = {"PasswordField6CharsValue"})
     public static void PasswordRepeatFieldClick() {
         findAndClick("input[id='users_models_RegisterForm_password_repeat']");
-        Assert.assertTrue(findElement("label[for='field_ur_pass_again']").isDisplayed());
+        Assert.assertEquals("пароль еще раз *" , findElement("label[for='field_ur_pass_again']").getText());
     }
     @Test (dependsOnMethods = {"PasswordRepeatFieldClick"})
-    public void PasswordRepeatFieldEmpty() {
+    public void PasswordRepeatFieldEmpty() throws InterruptedException {
         EmptyClick("input[id='users_models_RegisterForm_password_repeat']");
+        Thread.sleep(2000);
         WebDriverWait wait=new WebDriverWait(browser, 10);
-        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("div[id='users_models_RegisterForm_password_repeat_em_']"))).isDisplayed());
-       // Assert.assertTrue(findElement("div[id='users_models_RegisterForm_password_repeat_em_']").isDisplayed());
+        Assert.assertEquals("Необходимо заполнить поле «Повторите пароль»." , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_password_repeat_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"PasswordRepeatFieldEmpty"})
-    public static void PasswordRepeatFieldUnequalValue () {
-        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", "111111");
+    public static void PasswordRepeatFieldUnequalValue () throws InterruptedException {
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", UnequalPasswordConfirm);
         EmptyClick("input[id='users_models_RegisterForm_password_repeat']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_password_repeat_em_']").isDisplayed());
+        Thread.sleep(2000);
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertEquals("Повторите пароль" , wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("div[id='users_models_RegisterForm_password_repeat_em_']"))).getText());
     }
     @Test (dependsOnMethods = {"PasswordRepeatFieldUnequalValue"})
     public static void PasswordRepeatFieldEqualValue () {
-        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", "123456");
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", Chars6Password);
         EmptyClick("input[id='users_models_RegisterForm_password_repeat']");
-        Assert.assertTrue (findElement("div[id='users_models_RegisterForm_password_repeat_em_']").isDisplayed());
+        WebDriverWait wait=new WebDriverWait(browser, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementWithText(
+                By.cssSelector("div[id='users_models_RegisterForm_password_repeat_em_']"),"Необходимо заполнить поле «Повторите пароль».")));
     }
     // Tests for Submitting user data for registration
     @Test (dependsOnMethods = {"PasswordRepeatFieldEqualValue"})
     public static void SubmitAllRequiredData()  {
         findAndClick("input[id='submitRegistration']");
-        WebDriverWait wait = new WebDriverWait(browser, 5);
+        WebDriverWait wait = new WebDriverWait(browser, 10);
         wait.until(ExpectedConditions.alertIsPresent());
-        //Assert.assertTrue(browser.switchTo().alert().getText() == "Для подтверждения регистрации, проверьте почту");
         Assert.assertEquals("Для подтверждения регистрации, проверьте почту",browser.switchTo().alert().getText());
         browser.switchTo().alert().accept();
     }
-//        findAndWrite("input[name='os_username']", "aprilepskiy");
-//        findAndWrite("input[name='os_password']", "Cent90308122");
-//        findAndClick("input[id='login']");
-//        Assert.assertTrue(elementExists("a[data-username]"));
-//    }
-//    @Test (dependsOnMethods = {"jiraLogin"})
-//    public static void createIssue () throws InterruptedException {
-//        findAndClick("a[id='browse_link']");
-//        findAndClick("a[id='admin_main_proj_link_lnk']");
-//        findAndClick("a[id='create_link']");
-//        findAndWrite("input[class='text long-field']", newIssueSummary);
-//        findAndWrite("input[id='assignee-field']", "Robert");
-//        findAndClick("input[id='create-issue-submit']");
-//        findElement("a.issue-created-key");
-//        Assert.assertTrue(elementExists("a.issue-created-key"));
-//        newIssueURL = findElement("a.issue-created-key").getAttribute("href");
-//    }
-//    @Test(dependsOnMethods = {"createIssue"})
-//    public static void viewIssue () {
-//        browser.get(newIssueURL);
-//        Assert.assertEquals(newIssueSummary, findElement("h1#summary-val").getText());
-//    }
-//    @Test(dependsOnMethods = {"createIssue"})
-//    public static void createIssueAttachment() {
-//        browser.get(newIssueURL);
-//        findElement("input[class='issue-drop-zone__file ignore-inline-attach']").sendKeys(attachmentPath);
-//        findElement("span[style='width: 100%;']");
-//        browser.get(newIssueURL);
-//        Assert.assertEquals(attachmentName, findElement("a[class='attachment-title']").getText());
-//    }
-//    @Test (dependsOnMethods = {"createIssueAttachment"})
-//    public static void downloadIssueAttachment() throws InterruptedException, IOException, NoSuchAlgorithmException {
-//        browser.get(newIssueURL);
-//        findAndClick("div[class='attachment-thumb']");
-//        Thread.sleep(5000);
-//        findAndClick("a[id='cp-control-panel-download']");
-//        Thread.sleep(5000);
-//        Assert.assertTrue(isFileDownloaded(attachmentName),"File names don't match of file downloading failed!");
-//        Assert.assertTrue(Objects.equals(getMD5(uploadPath + "/" + attachmentName), getMD5(attachmentPath)),"MD5 is incorrect!");
-//        new File(uploadPath + "/" + attachmentName).delete();
-//    }
+    // Tests for Submitting user data for registration
+    @Test (priority = 1)
+    public static void SubmitWithoutName() throws InterruptedException {
+        browser.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(browser, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(findElement("a[id='btnRegOpen']"))).click();
+        Thread.sleep(5000);
+        findAndWrite("input[id='users_models_RegisterForm_family']", TestSurname);
+        findAndWrite("input[id='users_models_RegisterForm_login']", UnduplNick);
+        findAndWrite("input[id='users_models_RegisterForm_email']", UnduplEmail);
+        findAndWrite("input[id='users_models_RegisterForm_password']", Chars6Password);
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", Chars6Password);
+        wait.until(ExpectedConditions.elementToBeClickable(
+                findElement("input[id='submitRegistration']"))).click();
+        Assert.assertEquals("Необходимо заполнить поле «Имя».", wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("div[id='users_models_RegisterForm_name_em_']"))).getText());
+        Thread.sleep(5000);
+    }
+    @Test (priority = 2)
+            //(dependsOnMethods = {"SubmitWithoutName"})
+    public static void SubmitWithoutSurname() throws InterruptedException {
+        browser.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(browser, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(findElement("a[id='btnRegOpen']"))).click();
+        Thread.sleep(5000);
+        findAndWrite("input[id='users_models_RegisterForm_name']", TestName);
+        findAndWrite("input[id='users_models_RegisterForm_login']", UnduplNick);
+        findAndWrite("input[id='users_models_RegisterForm_email']", UnduplEmail);
+        findAndWrite("input[id='users_models_RegisterForm_password']", Chars6Password);
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", Chars6Password);
+        wait.until(ExpectedConditions.elementToBeClickable(
+                findElement("input[id='submitRegistration']"))).click();
+        Assert.assertEquals("Необходимо заполнить поле «Фамилия».", wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("div[id='users_models_RegisterForm_family_em_']"))).getText());
+        Thread.sleep(5000);
+    }
+    @Test (priority = 3)
+            //(dependsOnMethods = {"SubmitWithoutSurname"})
+    public static void SubmitWithoutLogin() throws InterruptedException {
+        browser.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(browser, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(findElement("a[id='btnRegOpen']"))).click();
+        Thread.sleep(5000);
+        findAndWrite("input[id='users_models_RegisterForm_name']", TestName);
+        findAndWrite("input[id='users_models_RegisterForm_family']", TestSurname);
+        findAndWrite("input[id='users_models_RegisterForm_email']", UnduplEmail);
+        findAndWrite("input[id='users_models_RegisterForm_password']", Chars6Password);
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", Chars6Password);
+        wait.until(ExpectedConditions.elementToBeClickable(
+                findElement("input[id='submitRegistration']"))).click();
+        Assert.assertEquals("Необходимо заполнить поле «Логин».", wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("div[id='users_models_RegisterForm_login_em_']"))).getText());
+        Thread.sleep(5000);
+
+    }
+    @Test (priority = 4)
+            //(dependsOnMethods = {"SubmitWithoutLogin"})
+    public static void SubmitWithoutEmail() throws InterruptedException {
+        browser.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(browser, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(findElement("a[id='btnRegOpen']"))).click();
+        Thread.sleep(5000);
+        findAndWrite("input[id='users_models_RegisterForm_name']", TestName);
+        findAndWrite("input[id='users_models_RegisterForm_family']", TestSurname);
+        findAndWrite("input[id='users_models_RegisterForm_login']", UnduplNick);
+        findAndWrite("input[id='users_models_RegisterForm_password']", Chars6Password);
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", Chars6Password);
+        wait.until(ExpectedConditions.elementToBeClickable(
+                findElement("input[id='submitRegistration']"))).click();
+        Assert.assertEquals("Необходимо заполнить поле «E-mail».", wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("div[id='users_models_RegisterForm_email_em_']"))).getText());
+        Thread.sleep(5000);
+    }
+    @Test (priority = 5)
+            //(dependsOnMethods = {"SubmitWithoutEmail"})
+    public static void SubmitWithoutPassword() throws InterruptedException {
+        browser.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(browser, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(findElement("a[id='btnRegOpen']"))).click();
+        Thread.sleep(5000);
+        findAndWrite("input[id='users_models_RegisterForm_name']", TestName);
+        findAndWrite("input[id='users_models_RegisterForm_family']", TestSurname);
+        findAndWrite("input[id='users_models_RegisterForm_login']", UnduplNick);
+        findAndWrite("input[id='users_models_RegisterForm_email']", UnduplEmail);
+        findAndWrite("input[id='users_models_RegisterForm_password_repeat']", Chars6Password);
+        wait.until(ExpectedConditions.elementToBeClickable(
+                findElement("input[id='submitRegistration']"))).click();
+        Assert.assertEquals("Необходимо заполнить поле «Пароль».", wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("div[id='users_models_RegisterForm_password_em_']"))).getText());
+        Thread.sleep(5000);
+    }
+    @Test (priority = 6)
+            //(dependsOnMethods = {"SubmitWithoutPassword"})
+    public static void SubmitWithoutPasswordRepeat() throws InterruptedException {
+        browser.navigate().refresh();
+        WebDriverWait wait = new WebDriverWait(browser, 2);
+        wait.until(ExpectedConditions.elementToBeClickable(findElement("a[id='btnRegOpen']"))).click();
+        Thread.sleep(5000);
+        findAndWrite("input[id='users_models_RegisterForm_name']", TestName);
+        findAndWrite("input[id='users_models_RegisterForm_family']", TestSurname);
+        findAndWrite("input[id='users_models_RegisterForm_login']", UnduplNick);
+        findAndWrite("input[id='users_models_RegisterForm_email']", UnduplEmail);
+        findAndWrite("input[id='users_models_RegisterForm_password']", Chars6Password);
+        wait.until(ExpectedConditions.elementToBeClickable(
+                findElement("input[id='submitRegistration']"))).click();
+        Thread.sleep(5000);
+        Assert.assertEquals("Необходимо заполнить поле «Повторите пароль».", wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector("div[id='users_models_RegisterForm_password_repeat_em_']"))).getText());
+    }
       // Close browser after tests are ended
     @AfterTest
     public static void closeBrowser() {
